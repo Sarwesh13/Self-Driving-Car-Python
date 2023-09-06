@@ -16,8 +16,13 @@ icon = pygame.image.load("logo.png")
 pygame.display.set_icon(icon) #changing default pygame icon
 
 #Game loop
-running = True  #Add a running variable to control the game loop
+running = True
+clock = pygame.time.Clock()  #Create a clock object to track time  
+
+#Add a running variable to control the game loop
 while running:
+    clock.tick(60)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False  #Set running to False to exit the game loop

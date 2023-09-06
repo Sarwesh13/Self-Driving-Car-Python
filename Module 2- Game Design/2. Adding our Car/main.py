@@ -15,8 +15,10 @@ pygame.display.set_icon(icon)
 player_car = car.PlayerCar(window_width // 2 - 25, window_height - 75, 50, 75, (255, 0, 0))
 
 # Game loop
+clock = pygame.time.Clock()
 running = True
 while running:
+    clock.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False

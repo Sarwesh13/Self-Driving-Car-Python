@@ -13,14 +13,16 @@ icon = pygame.image.load("logo.png")
 pygame.display.set_icon(icon)
 
 # Create the PlayerCar object
-player_car = car.PlayerCar(window_width/2-25, window_height-75,50,75,(255,0,0))
+player_car = car.PlayerCar(window_width/2-25, window_height-75,30,45,(255,0,0))
 
 # Create a controls instance
 controls = controls.Controls()
 
 # Game loop
 running = True
+clock = pygame.time.Clock()
 while running:
+    clock.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
