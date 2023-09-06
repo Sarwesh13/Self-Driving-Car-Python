@@ -10,13 +10,13 @@ class PlayerCar:
 
     def update(self, controls):
         if controls.forward:
-            self.y -= 1
+            self.y -= 3
         if controls.reverse:
-            self.y += 1
+            self.y += 3
         if controls.left:
-            self.x -= 1
+            self.x -= 3
         if controls.right:
-            self.x += 1
+            self.x += 3
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height))
