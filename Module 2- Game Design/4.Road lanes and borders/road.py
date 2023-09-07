@@ -15,10 +15,11 @@ class Road:
         return self.x + lane_width * lane_index + lane_width / 2
 
     def draw(self, screen):
-        road_color = (128, 128, 128)  
-        lane_color = (255, 255, 0)
-        border_color = (255, 255, 0)
-        border_width = 5
+        # Grey road color, light yellow lane color, yellow border color
+        road_color = (128, 128, 128) 
+        lane_color = (255, 216, 0)
+        border_color = (255, 255, 224)
+        border_width = 2
 
         lane_width = self.width / self.lane_count
 

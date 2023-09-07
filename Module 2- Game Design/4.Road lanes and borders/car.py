@@ -1,5 +1,6 @@
 import pygame
 import math
+import os
 
 class PlayerCar:
     def __init__(self, x, y, width, height, color):
@@ -54,19 +55,25 @@ class PlayerCar:
         # self.y-=self.speed 
 
     def draw(self, screen):
-        #create a car surface with a size matching the car's width and height
-        #use pygame.SRCALPHA to create a surface with an alpha channel for transparency
-        #fill the car surface with a transparent background by setting it to (0, 0, 0, 0)
+        #load the car image from the file "./car.png" using pygame.image.load
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        image_path = os.path.join(current_dir, "car.png")
+        car_surface = pygame.image.load(image_path)
 
-        car_surface = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
-        car_surface.fill((0, 0, 0, 0))
-        pygame.draw.rect(car_surface, self.color, (0, 0, self.width, self.height))
+        # Draw the car image on the screen of size (self.width, self.height) at position (self.x, self.y)
+        # screen.blit(car_surface, (self.x, self.y))
+        
+
+        
+
+
 
         #rotate the car surface based on the current self.angle using pygame.transform.rotate
         #create a new rectangle new_rect for the rotated image, setting its center to (self.x, self.y)
         #draw the rotated car image on the screen using screen.blit
 
-        rotated_image = pygame.transform.rotate(car_surface, math.degrees(self.angle))
+        small_car_surface = pygame.transform.scale(car_surface, (self.width, self.height))
+        rotated_image = pygame.transform.rotate(small_car_surface, math.degrees(self.angle))
         new_rect = rotated_image.get_rect(center=(self.x, self.y))
         screen.blit(rotated_image, new_rect.topleft)
 

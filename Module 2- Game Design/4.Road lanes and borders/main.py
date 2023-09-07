@@ -34,7 +34,7 @@ while running:
         # Update controls based on keyboard events
         controls.update(event)
 
-    screen.fill((0, 255, 0))
+    screen.fill((255, 255, 255))
 
     # Draw the road
     road.draw(screen)
