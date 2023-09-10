@@ -5,13 +5,11 @@ import sensor
 
 
 class PlayerCar:
-    def __init__(self, x, y, width, height, color):
+    def __init__(self, x, y, width, height):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
-        self.color = color
-
 
         #Advanced car control attributes
         self.speed = 0

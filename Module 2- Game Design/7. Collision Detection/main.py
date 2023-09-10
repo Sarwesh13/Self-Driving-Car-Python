@@ -19,7 +19,7 @@ road_height=10000
 road = road.Road(road_width, road_height, lane_count=3, window_width=window_width, window_height=window_height)
 
 # Create the PlayerCar object 
-player_car = car.PlayerCar(road.get_lane_center(1), 10000, 30, 45, (255, 255, 0))
+player_car = car.PlayerCar(road.get_lane_center(1), 10000, 30, 45)
 
 # Create a controls instance
 controls = controls.Controls()
