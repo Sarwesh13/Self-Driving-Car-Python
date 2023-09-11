@@ -42,6 +42,7 @@ while running:
             running = False
         # Update controls based on keyboard events
         controlsP.update(event)
+        controlsT.update(event)
     
     # Calculate the camera's y-coordinate based on the car's position
     camera_y = player_car.y - camera_y_offset
