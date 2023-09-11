@@ -22,7 +22,7 @@ road = road.Road(road_width, road_height, lane_count=3, window_width=window_widt
 player_car = car.Car(road.get_lane_center(1), 10000, 30, 45,"PLAYER")
 
 #array of traffic cars
-traffic = [
+traffics = [
     car.Car(road.get_lane_center(1), 9900, 30, 45,"TRAFFIC",2)
 ]
 #controls intance
@@ -52,12 +52,12 @@ while running:
     road.draw(screen, camera_y)
 
     #update and draw player car 
-    player_car.update(controlsP, road.get_borders())
+    player_car.update(controlsP, road.get_borders(), traffics)
     player_car.draw(screen, camera_y)
 
     #update and draw the traffic cars
-    for traffic_car in traffic:
-        traffic_car.update(controlsT, road.get_borders())
+    for traffic_car in traffics:
+        traffic_car.update(controlsT, road.get_borders(),[])
         traffic_car.draw(screen, camera_y)
 
     # Update the display

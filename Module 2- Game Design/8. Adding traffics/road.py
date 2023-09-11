@@ -3,7 +3,7 @@ import pygame
 class Road:
     def __init__(self, width, total_height, lane_count=3, window_width=800, window_height=600):
         self.width = width
-        self.total_height = total_height  # Set the total height of the road
+        self.total_height = total_height  
         self.lane_count = lane_count
         self.window_width = window_width
         self.window_height = window_height

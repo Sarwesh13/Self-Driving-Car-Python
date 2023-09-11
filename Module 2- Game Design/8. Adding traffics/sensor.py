@@ -11,22 +11,32 @@ class Sensor:
         self.rays = []
         self.readings = []
 
-    def update(self, road_borders):
+    def update(self, road_borders,traffics):
         self.cast_rays()
         self.readings = []
         for ray in self.rays:
-            self.readings.append(self.get_reading(ray, road_borders))
+            self.readings.append(self.get_reading(ray, road_borders, traffics))
 
-    def get_reading(self, ray, road_borders):
+    def get_reading(self, ray, road_borders, traffics):
         touches = []
 
         for border in road_borders:
             touch = utils.get_intersection(ray[0], ray[1], border[0], border[1])
             if touch:
                 touches.append(touch)
-
+        
+        for traffic in traffics:
+            poly = traffic.polygon
+            for i in range(len(poly)):
+                p1 = poly[i]
+                p2 = poly[(i + 1) % len(poly)]
+                touch = utils.get_intersection(ray[0], ray[1], p1, p2)
+                if touch:
+                    touches.append(touch)
+            
         if not touches:
             return None
+        
         else:
             offsets = [touch['offset'] for touch in touches]
             min_offset = min(offsets)

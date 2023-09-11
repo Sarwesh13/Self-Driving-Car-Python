@@ -25,15 +25,17 @@ class Car:
             self.sensor = sensor.Sensor(self)
 
         self.damaged=False
+        self.polygon = self.create_polygon()
       
         
-    def update(self, controls, road_borders):
+    def update(self, controls, road_borders,traffics):
         if not self.damaged:
             self.move(controls)
             self.polygon = self.create_polygon()
-            self.damaged = self.assess_damage(road_borders)
+            self.damaged = self.assess_damage(road_borders,traffics)
         if hasattr(self, 'sensor'):
-            self.sensor.update(road_borders)
+            self.sensor.update(road_borders,traffics)
+
 
     
     def create_polygon(self):
@@ -59,9 +61,13 @@ class Car:
         return points
 
 
-    def assess_damage(self, road_borders):
+    def assess_damage(self, road_borders,traffics):
         for border in road_borders:
             if utils.polys_intersect(self.polygon, border):
+                return True
+            
+        for traffic in traffics:
+            if utils.polys_intersect(self.polygon, traffic.polygon):
                 return True
         return False
 
