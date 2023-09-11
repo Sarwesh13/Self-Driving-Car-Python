@@ -5,37 +5,36 @@ import sensor
 import utils
 
 
-class PlayerCar:
-    def __init__(self, x, y, width, height, color):
+class Car:
+    def __init__(self, x, y, width, height, control_type, max_speed=3):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
-        self.color = color
-
 
         #Advanced car control attributes
         self.speed = 0
         self.acceleration = 0.2
-        self.max_speed = 3
+        self.max_speed = max_speed
         self.friction = 0.05
         self.angle = 0
 
-        self.sensor = sensor.Sensor(self)
+        self.control_type = control_type
+
+        if(control_type=="PLAYER"):
+            self.sensor = sensor.Sensor(self)
 
         self.damaged=False
+      
         
-
     def update(self, controls, road_borders):
         if not self.damaged:
             self.move(controls)
             self.polygon = self.create_polygon()
             self.damaged = self.assess_damage(road_borders)
-        
-        self.sensor.update(road_borders)
+        if hasattr(self, 'sensor'):
+            self.sensor.update(road_borders)
 
-
-        self.sensor.update(road_borders)
     
     def create_polygon(self):
         points = []
@@ -102,21 +101,33 @@ class PlayerCar:
         # self.y-=self.speed 
 
     def draw(self, screen, camera_y):
-        if self.damaged:
-            #load the damaged car image from the file "./damaged_car.png" using pygame.image.load
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            image_path = os.path.join(current_dir, "damaged_car.png")
-            car_surface = pygame.image.load(image_path)
+        if self.control_type == "PLAYER":
+            if self.damaged:
+                #load the damaged car image from the file "./damaged_car.png" using pygame.image.load
+                current_dir = os.path.dirname(os.path.abspath(__file__))
+                image_path = os.path.join(current_dir, "damaged_car.png")
+                car_surface = pygame.image.load(image_path)
+            else:
+                #load the original car image from the file "./car.png" using pygame.image.load
+                current_dir = os.path.dirname(os.path.abspath(__file__))
+                image_path = os.path.join(current_dir, "car.png")
+                car_surface = pygame.image.load(image_path)
+                
+
+            small_car_surface = pygame.transform.scale(car_surface, (self.width, self.height))
+            rotated_image = pygame.transform.rotate(small_car_surface, math.degrees(self.angle))
+            new_rect = rotated_image.get_rect(center=(self.x, self.y-camera_y))
+            screen.blit(rotated_image, new_rect.topleft)
+
+            if self.sensor:
+                self.sensor.draw(screen, camera_y)
+        
         else:
-            #load the original car image from the file "./car.png" using pygame.image.load
             current_dir = os.path.dirname(os.path.abspath(__file__))
-            image_path = os.path.join(current_dir, "car.png")
+            image_path = os.path.join(current_dir, "traffic.png")
             car_surface = pygame.image.load(image_path)
-            
 
-        small_car_surface = pygame.transform.scale(car_surface, (self.width, self.height))
-        rotated_image = pygame.transform.rotate(small_car_surface, math.degrees(self.angle))
-        new_rect = rotated_image.get_rect(center=(self.x, self.y-camera_y))
-        screen.blit(rotated_image, new_rect.topleft)
-
-        self.sensor.draw(screen, camera_y)
+            small_car_surface = pygame.transform.scale(car_surface, (self.width, self.height))
+            rotated_image = pygame.transform.rotate(small_car_surface, math.degrees(self.angle))
+            new_rect = rotated_image.get_rect(center=(self.x, self.y - camera_y))
+            screen.blit(rotated_image, new_rect.topleft)

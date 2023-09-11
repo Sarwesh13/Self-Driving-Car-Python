@@ -19,13 +19,18 @@ road_height=10000
 road = road.Road(road_width, road_height, lane_count=3, window_width=window_width, window_height=window_height)
 
 # Create the PlayerCar object 
-player_car = car.PlayerCar(road.get_lane_center(1), 10000, 30, 45, (255, 255, 0))
+player_car = car.Car(road.get_lane_center(1), 10000, 30, 45,"PLAYER")
 
-# Create a controls instance
-controls = controls.Controls()
+#array of traffic cars
+traffic = [
+    car.Car(road.get_lane_center(1), 9900, 30, 45,"TRAFFIC",2)
+]
+#controls intance
+controlsP=controls.Controls("PLAYER")
+controlsT=controls.Controls("TRAFFIC")
 
 # Camera offset to follow the car on the y-axis
-camera_y_offset = 450
+camera_y_offset = 500
 
 # Game loop
 running = True
@@ -36,8 +41,8 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         # Update controls based on keyboard events
-        controls.update(event)
-
+        controlsP.update(event)
+    
     # Calculate the camera's y-coordinate based on the car's position
     camera_y = player_car.y - camera_y_offset
 
@@ -46,11 +51,14 @@ while running:
     # Draw the road with camera_y offset
     road.draw(screen, camera_y)
 
-    # Update the player car's position based on controls
-    player_car.update(controls,road.get_borders())
-
-    # Draw the player car with camera_y offset
+    #update and draw player car 
+    player_car.update(controlsP, road.get_borders())
     player_car.draw(screen, camera_y)
+
+    #update and draw the traffic cars
+    for traffic_car in traffic:
+        traffic_car.update(controlsT, road.get_borders())
+        traffic_car.draw(screen, camera_y)
 
     # Update the display
     pygame.display.update()
