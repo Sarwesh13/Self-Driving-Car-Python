@@ -6,7 +6,7 @@ import utils
 
 
 class Car:
-    def __init__(self, x, y, width, height, control_type, max_speed=3):
+    def __init__(self, x, y, width, height, control_type, max_speed=4):
         self.x = x
         self.y = y
         self.width = width

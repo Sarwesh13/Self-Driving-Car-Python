@@ -23,7 +23,13 @@ player_car = car.Car(road.get_lane_center(1), 10000, 30, 45,"PLAYER")
 
 #array of traffic cars
 traffics = [
-    car.Car(road.get_lane_center(1), 9900, 30, 45,"TRAFFIC",2)
+    car.Car(road.get_lane_center(1), 9800, 30, 45,"TRAFFIC",2),
+    car.Car(road.get_lane_center(0), 9600, 30, 45,"TRAFFIC",2),
+    car.Car(road.get_lane_center(2), 9600, 30, 45,"TRAFFIC",2),
+    car.Car(road.get_lane_center(1), 9400, 30, 45,"TRAFFIC",2),
+    car.Car(road.get_lane_center(0), 9400, 30, 45,"TRAFFIC",2),
+    car.Car(road.get_lane_center(1), 9200, 30, 45,"TRAFFIC",2),
+    car.Car(road.get_lane_center(2), 9200, 30, 45,"TRAFFIC",2)
 ]
 #controls intance
 controlsP=controls.Controls("PLAYER")
