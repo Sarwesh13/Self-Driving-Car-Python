@@ -10,7 +10,7 @@ window_height = 600
 
 screen = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption("Self Driving Car")
-icon = pygame.image.load("logo.png")
+icon = pygame.image.load("logo.png").convert_alpha()
 pygame.display.set_icon(icon)
 
 # Create the Road object
@@ -36,7 +36,7 @@ controlsP=controls.Controls("PLAYER")
 controlsT=controls.Controls("TRAFFIC")
 
 # Camera offset to follow the car on the y-axis
-camera_y_offset = 500
+camera_y_offset = 450
 
 # Game loop
 running = True

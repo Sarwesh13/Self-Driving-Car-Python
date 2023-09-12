@@ -112,12 +112,12 @@ class Car:
                 #load the damaged car image from the file "./damaged_car.png" using pygame.image.load
                 current_dir = os.path.dirname(os.path.abspath(__file__))
                 image_path = os.path.join(current_dir, "damaged_car.png")
-                car_surface = pygame.image.load(image_path)
+                car_surface = pygame.image.load(image_path).convert_alpha()
             else:
                 #load the original car image from the file "./car.png" using pygame.image.load
                 current_dir = os.path.dirname(os.path.abspath(__file__))
                 image_path = os.path.join(current_dir, "car.png")
-                car_surface = pygame.image.load(image_path)
+                car_surface = pygame.image.load(image_path).convert_alpha()
                 
 
             small_car_surface = pygame.transform.scale(car_surface, (self.width, self.height))
@@ -131,7 +131,7 @@ class Car:
         else:
             current_dir = os.path.dirname(os.path.abspath(__file__))
             image_path = os.path.join(current_dir, "traffic.png")
-            car_surface = pygame.image.load(image_path)
+            car_surface = pygame.image.load(image_path).convert_alpha()
 
             small_car_surface = pygame.transform.scale(car_surface, (self.width, self.height))
             rotated_image = pygame.transform.rotate(small_car_surface, math.degrees(self.angle))

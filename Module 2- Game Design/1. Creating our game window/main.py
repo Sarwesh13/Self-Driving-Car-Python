@@ -12,7 +12,7 @@ window_height = 600
 # Create the game window
 screen = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption("Self Driving Car") #changing default title of "pygame window"
-icon = pygame.image.load("logo.png") 
+icon = pygame.image.load("logo.png").convert_alpha()
 pygame.display.set_icon(icon) #changing default pygame icon
 
 #Game loop
