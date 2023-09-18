@@ -52,4 +52,3 @@ class Level:
 
         return self.outputs
 
-

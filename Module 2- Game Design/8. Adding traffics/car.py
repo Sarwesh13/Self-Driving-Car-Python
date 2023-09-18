@@ -12,6 +12,10 @@ class Car:
         self.width = width
         self.height = height
 
+        self.image_traffic = pygame.image.load('traffic.png').convert_alpha()
+        self.image_player = pygame.image.load('car.png').convert_alpha()
+        self.image_damaged = pygame.image.load('damaged_car.png').convert_alpha()
+
         #Advanced car control attributes
         self.speed = 0
         self.acceleration = 0.2
@@ -109,31 +113,15 @@ class Car:
     def draw(self, screen, camera_y):
         if self.control_type == "PLAYER":
             if self.damaged:
-                #load the damaged car image from the file "./damaged_car.png" using pygame.image.load
-                current_dir = os.path.dirname(os.path.abspath(__file__))
-                image_path = os.path.join(current_dir, "damaged_car.png")
-                car_surface = pygame.image.load(image_path).convert_alpha()
+                image_to_draw = self.image_damaged
             else:
-                #load the original car image from the file "./car.png" using pygame.image.load
-                current_dir = os.path.dirname(os.path.abspath(__file__))
-                image_path = os.path.join(current_dir, "car.png")
-                car_surface = pygame.image.load(image_path).convert_alpha()
-                
-
-            small_car_surface = pygame.transform.scale(car_surface, (self.width, self.height))
-            rotated_image = pygame.transform.rotate(small_car_surface, math.degrees(self.angle))
-            new_rect = rotated_image.get_rect(center=(self.x, self.y-camera_y))
-            screen.blit(rotated_image, new_rect.topleft)
-
+                image_to_draw = self.image_player
             if self.sensor:
                 self.sensor.draw(screen, camera_y)
-        
         else:
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            image_path = os.path.join(current_dir, "traffic.png")
-            car_surface = pygame.image.load(image_path).convert_alpha()
+            image_to_draw = self.image_traffic
 
-            small_car_surface = pygame.transform.scale(car_surface, (self.width, self.height))
-            rotated_image = pygame.transform.rotate(small_car_surface, math.degrees(self.angle))
-            new_rect = rotated_image.get_rect(center=(self.x, self.y - camera_y))
-            screen.blit(rotated_image, new_rect.topleft)
+        small_car_surface = pygame.transform.scale(image_to_draw, (self.width, self.height))
+        rotated_image = pygame.transform.rotate(small_car_surface, math.degrees(self.angle))
+        new_rect = rotated_image.get_rect(center=(self.x, self.y-camera_y))
+        screen.blit(rotated_image, new_rect.topleft)

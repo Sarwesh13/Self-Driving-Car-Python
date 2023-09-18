@@ -10,6 +10,8 @@ class PlayerCar:
         self.height = height
         self.color = color
 
+        self.image=pygame.image.load('car.png').convert_alpha()
+
         #Advanced car control attributes
         self.speed = 0
         self.acceleration = 0.2
@@ -55,18 +57,10 @@ class PlayerCar:
         # self.y-=self.speed 
 
     def draw(self, screen, camera_y):
-        #load the car image from the file "./car.png" using pygame.image.load
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        image_path = os.path.join(current_dir, "car.png")
-        car_surface = pygame.image.load(image_path)
+        image_to_draw=self.image
+ 
 
-        # Draw the car image on the screen of size (self.width, self.height) at position (self.x, self.y)
-        # screen.blit(car_surface, (self.x, self.y))
-        #rotate the car surface based on the current self.angle using pygame.transform.rotate
-        #create a new rectangle new_rect for the rotated image, setting its center to (self.x, self.y)
-        #draw the rotated car image on the screen using screen.blit
-
-        small_car_surface = pygame.transform.scale(car_surface, (self.width, self.height))
+        small_car_surface = pygame.transform.scale(image_to_draw, (self.width, self.height))
         rotated_image = pygame.transform.rotate(small_car_surface, math.degrees(self.angle))
         new_rect = rotated_image.get_rect(center=(self.x, self.y-camera_y))
         screen.blit(rotated_image, new_rect.topleft)

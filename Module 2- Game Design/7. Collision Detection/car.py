@@ -13,6 +13,9 @@ class PlayerCar:
         self.height = height
         self.color = color
 
+        self.image_player=pygame.image.load('car.png').convert_alpha()
+        self.image_damaged=pygame.image.load('damaged_car.png').convert_alpha()
+
 
         #Advanced car control attributes
         self.speed = 0
@@ -103,20 +106,15 @@ class PlayerCar:
 
     def draw(self, screen, camera_y):
         if self.damaged:
-            #load the damaged car image from the file "./damaged_car.png" using pygame.image.load
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            image_path = os.path.join(current_dir, "damaged_car.png")
-            car_surface = pygame.image.load(image_path)
+            image_to_draw=self.image_damaged
         else:
-            #load the original car image from the file "./car.png" using pygame.image.load
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            image_path = os.path.join(current_dir, "car.png")
-            car_surface = pygame.image.load(image_path)
+            image_to_draw=self.image_player
             
-
-        small_car_surface = pygame.transform.scale(car_surface, (self.width, self.height))
+        self.sensor.draw(screen, camera_y)
+        
+        small_car_surface = pygame.transform.scale(image_to_draw, (self.width, self.height))
         rotated_image = pygame.transform.rotate(small_car_surface, math.degrees(self.angle))
         new_rect = rotated_image.get_rect(center=(self.x, self.y-camera_y))
         screen.blit(rotated_image, new_rect.topleft)
 
-        self.sensor.draw(screen, camera_y)
+        

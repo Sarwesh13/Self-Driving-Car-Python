@@ -26,18 +26,18 @@ def generate_cars(N, road):
         player_cars.append(car_instance)
     return player_cars
 
-N = 2
+N = 5
 player_cars = generate_cars(N, road)
 
 #array of traffic cars
 traffics = [
-    car.Car(road.get_lane_center(1), 9800, 30, 45,"TRAFFIC",2),
-    car.Car(road.get_lane_center(0), 9600, 30, 45,"TRAFFIC",2),
-    car.Car(road.get_lane_center(2), 9600, 30, 45,"TRAFFIC",2),
-    car.Car(road.get_lane_center(1), 9400, 30, 45,"TRAFFIC",2),
-    car.Car(road.get_lane_center(0), 9400, 30, 45,"TRAFFIC",2),
-    car.Car(road.get_lane_center(1), 9200, 30, 45,"TRAFFIC",2),
-    car.Car(road.get_lane_center(2), 9200, 30, 45,"TRAFFIC",2)
+    car.Car(road.get_lane_center(1), 9800, 30, 45,"TRAFFIC",2)
+    # car.Car(road.get_lane_center(0), 9600, 30, 45,"TRAFFIC",2),
+    # car.Car(road.get_lane_center(2), 9600, 30, 45,"TRAFFIC",2),
+    # car.Car(road.get_lane_center(1), 9400, 30, 45,"TRAFFIC",2),
+    # car.Car(road.get_lane_center(0), 9400, 30, 45,"TRAFFIC",2),
+    # car.Car(road.get_lane_center(1), 9200, 30, 45,"TRAFFIC",2),
+    # car.Car(road.get_lane_center(2), 9200, 30, 45,"TRAFFIC",2)
 ]
 #controls intance
 controlsP=controls.Controls("PLAYER")
@@ -45,6 +45,9 @@ controlsT=controls.Controls("TRAFFIC")
 
 # Camera offset to follow the car on the y-axis
 camera_y_offset = 450
+
+def save_brain():
+    pass
 
 # Game loop
 running = True
@@ -57,9 +60,13 @@ while running:
         # Update controls based on keyboard events
         controlsP.update(event)
         controlsT.update(event)
+
+    #best car with least y-value
+    best_car = min(player_cars, key=lambda c: c.y)
+    # print(best_car.brain)
     
     # Calculate the camera's y-coordinate based on the car's position
-    camera_y = player_cars[0].y - camera_y_offset
+    camera_y = best_car.y - camera_y_offset
 
     screen.fill((255, 255, 255)) #white
 
@@ -67,9 +74,9 @@ while running:
     road.draw(screen, camera_y)
 
     #update and draw player car
-    for i,p in enumerate(player_cars): 
+    for p in player_cars: 
         p.update(controlsP, road.get_borders(), traffics)
-        if i == 0:
+        if p == best_car:
             p.draw(screen, camera_y, draw_sensor=True)
         else:
             p.draw(screen, camera_y)
