@@ -26,14 +26,14 @@ def generate_cars(N, road):
         player_cars.append(car_instance)
     return player_cars
 
-N = 20
+N = 10
 player_cars = generate_cars(N, road)
 
 #array of traffic cars
 traffics = [
     car.Car(road.get_lane_center(1), 9800, 30, 45,"TRAFFIC",2),
-    car.Car(road.get_lane_center(0), 9600, 30, 45,"TRAFFIC",2),
-    car.Car(road.get_lane_center(2), 9600, 30, 45,"TRAFFIC",2),
+    # car.Car(road.get_lane_center(0), 9600, 30, 45,"TRAFFIC",2),
+    # car.Car(road.get_lane_center(2), 9600, 30, 45,"TRAFFIC",2),
     # car.Car(road.get_lane_center(1), 9400, 30, 45,"TRAFFIC",2),
     # car.Car(road.get_lane_center(0), 9400, 30, 45,"TRAFFIC",2),
     # car.Car(road.get_lane_center(1), 9200, 30, 45,"TRAFFIC",2),
@@ -46,24 +46,37 @@ controlsT=controls.Controls("TRAFFIC")
 # Camera offset to follow the car on the y-axis
 camera_y_offset = 450
 
-#store the initial positions of player and traffic cars
+#store the initial positions of cars, and best brain 
 initial_player_positions = [(car.x, car.y) for car in player_cars]
 initial_traffic_positions = [(car.x, car.y) for car in traffics]
-
-
+best_brain=None
 
 def restart_game():
+    if best_brain:
+        best_car.brain = best_brain
+        
+
     for i, player_car in enumerate(player_cars):
         player_car.x, player_car.y = initial_player_positions[i]
-        player_car.damaged = False  
+        player_car.damaged = False        
 
     for i, traffic_car in enumerate(traffics):
         traffic_car.x, traffic_car.y = initial_traffic_positions[i]
+    
+    # if best_brain:
+    #     player_cars[0].brain = best_brain
 
-#restart button
-restart_button = pygame.Rect(10, 10, 100, 50)  
-font = pygame.font.Font(None, 36)
-text = font.render("Restart", True, (0, 0, 0))
+#button properties
+restart_button = pygame.Rect(10, 10, 100, 50)
+save_button = pygame.Rect(640, 10, 150, 50)
+button_font = pygame.font.Font(None, 36)
+button_colors = {
+    "idle": (0, 0, 0),
+    "hover": (128, 128, 128),
+    "click": (0, 255, 0),
+}
+restart_button_state="idle"
+save_button_state="idle"
 
 # Game loop
 running = True
@@ -73,9 +86,26 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.MOUSEMOTION:
+            # Check if the mouse is hovering over the buttons
+            if restart_button.collidepoint(event.pos):
+                restart_button_state = "hover"
+            else:
+                restart_button_state = "idle"
+
+            if save_button.collidepoint(event.pos):
+                save_button_state = "hover"
+            else:
+                save_button_state = "idle"
+                
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if restart_button.collidepoint(event.pos):
+                restart_button_state="click"
                 restart_game()
+                
+            elif save_button.collidepoint(event.pos):
+                save_button_state="click"
+                best_brain = best_car.brain
 
         # Update controls based on keyboard events
         controlsP.update(event)
@@ -83,8 +113,7 @@ while running:
 
     #best car with least y-value
     best_car = min(player_cars, key=lambda c: c.y)
-    # print(best_car.brain)
-    
+
     # Calculate the camera's y-coordinate based on the car's position
     camera_y = best_car.y - camera_y_offset
 
@@ -106,9 +135,17 @@ while running:
         traffic_car.update(controlsT, road.get_borders(),[])
         traffic_car.draw(screen, camera_y)
 
-    #draw restart button
-    pygame.draw.rect(screen, (0, 0, 255), restart_button)
-    screen.blit(text, (20, 20))
+    #restart button
+    restart_button_color = button_colors[restart_button_state]
+    pygame.draw.rect(screen, restart_button_color, restart_button)
+    restart_text = button_font.render("Restart", True, (255, 255, 255))
+    screen.blit(restart_text, (20, 20))
+
+    #save brain button 
+    save_button_color = button_colors[save_button_state]
+    pygame.draw.rect(screen, save_button_color, save_button)
+    save_text = button_font.render("Save Brain", True, (255, 255, 255))
+    screen.blit(save_text, (650, 20))
 
     # Update the display
     pygame.display.update()
