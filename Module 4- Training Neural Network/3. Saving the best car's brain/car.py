@@ -41,20 +41,20 @@ class Car:
             self.move(controls)
             self.polygon = self.create_polygon()
             self.damaged = self.assess_damage(road_borders,traffics)
-            if hasattr(self, 'sensor'):
-                self.sensor.update(road_borders,traffics)
-                #extract offsets from sensor readings and map them to 0 if null, otherwise 1 - offset
-                s = [0 if reading is None else 1 - reading['offset'] for reading in self.sensor.readings]
+        if hasattr(self, 'sensor'):
+            self.sensor.update(road_borders,traffics)
+            #extract offsets from sensor readings and map them to 0 if null, otherwise 1 - offset
+            s = [0 if reading is None else 1 - reading['offset'] for reading in self.sensor.readings]
 
-                outputs = network.NeuralNetwork.feed_forward(s, self.brain)
-                #for checking outputs in terminal
-                # print(outputs)
+            outputs = network.NeuralNetwork.feed_forward(s, self.brain)
+            #for checking outputs in terminal
+            print(outputs)
 
-                if self.use_brain:
-                    controls.forward = outputs[0]
-                    controls.left = outputs[1]
-                    controls.right = outputs[2]
-                    controls.reverse = outputs[3]
+            if self.use_brain:
+                controls.forward = outputs[0]
+                controls.left = outputs[1]
+                controls.right = outputs[2]
+                controls.reverse = outputs[3]
 
     
     def create_polygon(self):

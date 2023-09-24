@@ -1,4 +1,6 @@
 import pygame
+import pickle
+
 import car
 import controls
 import road
@@ -26,8 +28,14 @@ def generate_cars(N, road):
         player_cars.append(car_instance)
     return player_cars
 
-N = 10
+N = 1
 player_cars = generate_cars(N, road)
+best_car=player_cars[0]
+try:
+    with open('brain.txt','rb') as b:
+        best_car.brain=pickle.load(b)
+except:
+    print('no file')
 
 #array of traffic cars
 traffics = [
@@ -46,28 +54,7 @@ controlsT=controls.Controls("TRAFFIC")
 # Camera offset to follow the car on the y-axis
 camera_y_offset = 450
 
-#store the initial positions of cars, and best brain 
-initial_player_positions = [(car.x, car.y) for car in player_cars]
-initial_traffic_positions = [(car.x, car.y) for car in traffics]
-best_brain=None
-
-def restart_game():
-    if best_brain:
-        best_car.brain = best_brain
-        
-
-    for i, player_car in enumerate(player_cars):
-        player_car.x, player_car.y = initial_player_positions[i]
-        player_car.damaged = False        
-
-    for i, traffic_car in enumerate(traffics):
-        traffic_car.x, traffic_car.y = initial_traffic_positions[i]
-    
-    # if best_brain:
-    #     player_cars[0].brain = best_brain
-
 #button properties
-restart_button = pygame.Rect(10, 10, 100, 50)
 save_button = pygame.Rect(640, 10, 150, 50)
 button_font = pygame.font.Font(None, 36)
 button_colors = {
@@ -75,7 +62,6 @@ button_colors = {
     "hover": (128, 128, 128),
     "click": (0, 255, 0),
 }
-restart_button_state="idle"
 save_button_state="idle"
 
 # Game loop
@@ -87,25 +73,17 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEMOTION:
-            # Check if the mouse is hovering over the buttons
-            if restart_button.collidepoint(event.pos):
-                restart_button_state = "hover"
-            else:
-                restart_button_state = "idle"
-
             if save_button.collidepoint(event.pos):
                 save_button_state = "hover"
             else:
                 save_button_state = "idle"
                 
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            if restart_button.collidepoint(event.pos):
-                restart_button_state="click"
-                restart_game()
-                
-            elif save_button.collidepoint(event.pos):
+        elif event.type == pygame.MOUSEBUTTONDOWN:               
+            if save_button.collidepoint(event.pos):
                 save_button_state="click"
                 best_brain = best_car.brain
+                with open('brain.txt','wb') as f:
+                    pickle.dump(best_brain,f)
 
         # Update controls based on keyboard events
         controlsP.update(event)
@@ -134,12 +112,6 @@ while running:
     for traffic_car in traffics:
         traffic_car.update(controlsT, road.get_borders(),[])
         traffic_car.draw(screen, camera_y)
-
-    #restart button
-    restart_button_color = button_colors[restart_button_state]
-    pygame.draw.rect(screen, restart_button_color, restart_button)
-    restart_text = button_font.render("Restart", True, (255, 255, 255))
-    screen.blit(restart_text, (20, 20))
 
     #save brain button 
     save_button_color = button_colors[save_button_state]
