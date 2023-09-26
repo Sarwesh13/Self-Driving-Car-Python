@@ -1,4 +1,5 @@
 import random
+import utils
 
 # class NeuralNetwork:
 #     def __init__(self, neuron_counts):
@@ -26,6 +27,20 @@ class NeuralNetwork:
         for i in range(1,len(network.levels)):
             outputs = Level.feed_forward(outputs,network.levels[i])
         return outputs
+    
+    @staticmethod
+    def mutate(network,amount=1):
+        for level in network.levels:
+            for i in range(len(level.biases)):
+                level.biases[i]=utils.lerp(level.biases[i],random.uniform(-1,1),amount)
+
+            for i in range(len(level.weights)):
+                for j in range(len(level.weights[i])):
+                    level.weights[i][j]=utils.lerp(level.weights[i][j],random.uniform(-1,1),amount)
+                
+
+            
+    
     
 class Level:
     def __init__(self, input_count, output_count):

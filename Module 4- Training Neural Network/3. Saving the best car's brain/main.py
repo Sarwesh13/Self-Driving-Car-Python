@@ -1,5 +1,6 @@
 import pygame
 import pickle
+import random
 
 import car
 import controls
@@ -34,17 +35,18 @@ best_car=player_cars[0]
 try:
     with open('brain.txt','rb') as b:
         best_car.brain=pickle.load(b)
+        # print(best_car.brain)
 except:
     print('no file')
 
 #array of traffic cars
 traffics = [
     car.Car(road.get_lane_center(1), 9800, 30, 45,"TRAFFIC",2),
-    # car.Car(road.get_lane_center(0), 9600, 30, 45,"TRAFFIC",2),
-    # car.Car(road.get_lane_center(2), 9600, 30, 45,"TRAFFIC",2),
+    car.Car(road.get_lane_center(0), 9600, 30, 45,"TRAFFIC",2),
+    car.Car(road.get_lane_center(2), 9600, 30, 45,"TRAFFIC",2),
     # car.Car(road.get_lane_center(1), 9400, 30, 45,"TRAFFIC",2),
     # car.Car(road.get_lane_center(0), 9400, 30, 45,"TRAFFIC",2),
-    # car.Car(road.get_lane_center(1), 9200, 30, 45,"TRAFFIC",2),
+    # car.Car(road.get_lane_center(0), 9200, 30, 45,"TRAFFIC",2),
     # car.Car(road.get_lane_center(2), 9200, 30, 45,"TRAFFIC",2)
 ]
 #controls intance
@@ -101,12 +103,13 @@ while running:
     road.draw(screen, camera_y)
 
     #update and draw player car
-    for p in player_cars: 
+    for i,p in enumerate(player_cars): 
         p.update(controlsP, road.get_borders(), traffics)
         if p == best_car:
             p.draw(screen, camera_y, draw_sensor=True)
         else:
             p.draw(screen, camera_y)
+        # print(f"car {i} brain is ", p.brain)
 
     #update and draw the traffic cars
     for traffic_car in traffics:

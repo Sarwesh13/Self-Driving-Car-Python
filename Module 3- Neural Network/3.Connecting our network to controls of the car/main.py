@@ -28,7 +28,7 @@ traffics = [
     # car.Car(road.get_lane_center(2), 9600, 30, 45,"TRAFFIC",2),
     # car.Car(road.get_lane_center(1), 9400, 30, 45,"TRAFFIC",2),
     # car.Car(road.get_lane_center(0), 9400, 30, 45,"TRAFFIC",2),
-    # car.Car(road.get_lane_center(1), 9200, 30, 45,"TRAFFIC",2),
+    # car.Car(road.get_lane_center(0), 9200, 30, 45,"TRAFFIC",2),
     # car.Car(road.get_lane_center(2), 9200, 30, 45,"TRAFFIC",2)
 ]
 #controls intance
