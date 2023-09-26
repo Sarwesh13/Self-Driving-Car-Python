@@ -29,15 +29,16 @@ def generate_cars(N, road):
         player_cars.append(car_instance)
     return player_cars
 
-N = 1
+N = 2
 player_cars = generate_cars(N, road)
-best_car=player_cars[0]
 try:
     with open('brain.txt','rb') as b:
-        best_car.brain=pickle.load(b)
-        # print(best_car.brain)
-except:
+        brain=pickle.load(b)
+        player_cars[0].brain=brain
+except FileNotFoundError:
     print('no file')
+except Exception as e:
+    print('error ', e)
 
 #array of traffic cars
 traffics = [

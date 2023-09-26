@@ -37,11 +37,18 @@ class NeuralNetwork:
             for i in range(len(level.weights)):
                 for j in range(len(level.weights[i])):
                     level.weights[i][j]=utils.lerp(level.weights[i][j],random.uniform(-1,1),amount)
-                
+    
+    def to_string(self):
+        result = ""
+        for i, level in enumerate(self.levels):
+            result += f"Level {i}:\n"
+            result += f"Inputs: {level.inputs}\n"
+            result += f"Outputs: {level.outputs}\n"
+            result += f"Biases: {level.biases}\n"
+            result += f"Weights: {level.weights}\n\n"
+        return result             
 
             
-    
-    
 class Level:
     def __init__(self, input_count, output_count):
         self.inputs = [None] * input_count
@@ -99,4 +106,7 @@ class Level:
                 level.outputs[i] = 0
 
         return level.outputs
+    
+
+
 

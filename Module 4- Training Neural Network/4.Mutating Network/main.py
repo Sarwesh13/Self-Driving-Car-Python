@@ -32,15 +32,24 @@ def generate_cars(N, road):
 
 N = 1
 player_cars = generate_cars(N, road)
-# best_car=player_cars[0]
 try:
-    with open('brain.txt','rb') as b:
+    with open('brain.txt', 'rb') as b:
+        saved_brain=pickle.load(b)
         for i in range(len(player_cars)):
-            player_cars[i].brain=pickle.load(b)
-            if(i!=0):
-                network.NeuralNetwork.mutate(player_cars[i].brain,0.1)
-except:
+            try:
+                player_cars[i].brain = saved_brain
+                if i != 0:
+                    network.NeuralNetwork.mutate(player_cars[i].brain,amount=0.1)
+            except EOFError:
+                print('End of file reached while loading brain for car', i)
+except FileNotFoundError:
     print('no file')
+except Exception as e:
+    print('error ', e)
+
+# for i,p in enumerate(player_cars):
+#     print(f"car {i} brain is :", p.brain.to_string())
+
 
 #array of traffic cars
 traffics = [
@@ -89,6 +98,7 @@ while running:
                 best_brain = best_car.brain
                 with open('brain.txt','wb') as f:
                     pickle.dump(best_brain,f)
+    
 
         # Update controls based on keyboard events
         controlsP.update(event)
