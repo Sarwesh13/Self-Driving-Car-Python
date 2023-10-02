@@ -22,7 +22,7 @@ road_height=10000
 road = road.Road(road_width, road_height, lane_count=3, window_width=window_width, window_height=window_height)
 
 
-def generate_cars(N, road):
+def generate_cars(N):
     player_cars = []
     for _ in range(N):
         car_instance = car.Car(road.get_lane_center(1), 10000, 30, 45, "PLAYER")
@@ -30,7 +30,7 @@ def generate_cars(N, road):
     return player_cars
 
 N = 2
-player_cars = generate_cars(N, road)
+player_cars = generate_cars(N)
 try:
     with open('brain.txt','rb') as b:
         brain=pickle.load(b)

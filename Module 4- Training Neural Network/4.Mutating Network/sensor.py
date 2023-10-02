@@ -14,10 +14,8 @@ class Sensor:
     def update(self, road_borders,traffics):
         self.cast_rays()
         self.readings = []
-        # for ray in self.rays:
-        #     self.readings.append(self.get_reading(ray, road_borders, traffics))
-        for i in range(len(self.rays)):
-            self.readings.append(self.get_reading(self.rays[i],road_borders,traffics))
+        for ray in self.rays:
+            self.readings.append(self.get_reading(ray, road_borders, traffics))
 
     def get_reading(self, ray, road_borders, traffics):
         touches = []
@@ -42,21 +40,16 @@ class Sensor:
         else:
             offsets = [touch['offset'] for touch in touches]
             min_offset = min(offsets)
-            return next((touch for touch in touches if touch['offset'] == min_offset),None)
-        
-            # offsets=[e.offset for e in touches]
-            # min_offset=min(offsets)
-            # return next((e for e in touches if e.offset==min_offset),None)
-
+            return next(touch for touch in touches if touch['offset'] == min_offset)
 
     def cast_rays(self):
         self.rays = []
         for i in range(self.ray_count):
-            ray_angle = self.car.angle + utils.lerp(
+            ray_angle = utils.lerp(
                 self.ray_spread / 2,
                 -self.ray_spread / 2,
                 0.5 if self.ray_count == 1 else i / (self.ray_count - 1)
-            )
+            )+self.car.angle
 
             start = {'x': self.car.x, 'y': self.car.y}
             end = {

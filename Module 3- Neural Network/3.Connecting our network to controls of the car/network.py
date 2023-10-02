@@ -10,7 +10,8 @@ class NeuralNetwork:
     def feed_forward(given_inputs, network):
         outputs = []
         for level in network.levels:
-            outputs = level.feed_forward(given_inputs)
+            outputs = Level.feed_forward(given_inputs,level)
+            print(outputs)
             given_inputs = outputs
         return outputs
 
@@ -35,20 +36,39 @@ class Level:
 
         for i in range(len(self.biases)):
             self.biases[i] = random.uniform(-1, 1)
+        
+    
+    @staticmethod
+    def feed_forward(given_inputs, level):
+        for i in range(len(level.inputs)):
+            level.inputs[i] = given_inputs[i]
 
-    def feed_forward(self, given_inputs):
-        for i in range(len(self.inputs)):
-            self.inputs[i] = given_inputs[i]
+        for i in range(len(level.outputs)):
+            # sum_value = 0
+            # for j in range(len(level.inputs)):
+            #     sum_value += level.inputs[j] * level.weights[j][i]
+            sum_value = sum(level.inputs[j] * level.weights[j][i] for j in range(len(level.inputs)))
 
-        for i in range(len(self.outputs)):
-            sum_value = 0
-            for j in range(len(self.inputs)):
-                sum_value += self.inputs[j] * self.weights[j][i]
-
-            if sum_value > self.biases[i]:
-                self.outputs[i] = 1
+            if sum_value > level.biases[i]:
+                level.outputs[i] = 1
             else:
-                self.outputs[i] = 0
+                level.outputs[i] = 0
 
-        return self.outputs
+        return level.outputs
+
+    # def feed_forward(self, given_inputs):
+    #     for i in range(len(self.inputs)):
+    #         self.inputs[i] = given_inputs[i]
+
+    #     for i in range(len(self.outputs)):
+    #         sum_value = 0
+    #         for j in range(len(self.inputs)):
+    #             sum_value += self.inputs[j] * self.weights[j][i]
+
+    #         if sum_value > self.biases[i]:
+    #             self.outputs[i] = 1
+    #         else:
+    #             self.outputs[i] = 0
+
+    #     return self.outputs
 

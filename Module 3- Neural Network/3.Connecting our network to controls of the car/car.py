@@ -49,7 +49,7 @@ class Car:
             
             outputs = network.NeuralNetwork.feed_forward(s, self.brain)
             #for checking outputs in terminal
-            print(outputs)
+            # print(outputs)
 
             if self.use_brain:
                 controls.forward = outputs[0]

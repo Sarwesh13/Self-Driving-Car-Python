@@ -29,8 +29,10 @@ class Car:
 
         if(control_type!="TRAFFIC"):
             self.sensor = sensor.Sensor(self)
+            # print(f"Created sensor for car with sensor: {self.sensor}")
             #input layer of 5(sensor rays) neurons, hidden layer of 6 neurons,and output of 4(up,left,right,down)
             self.brain=network.NeuralNetwork([self.sensor.ray_count,6,4])
+            # print(f"car has brain {self.brain}")
 
         self.damaged=False
         self.polygon = self.create_polygon()
@@ -44,13 +46,13 @@ class Car:
         if hasattr(self, 'sensor'):
             self.sensor.update(road_borders,traffics)
             #extract offsets from sensor readings and map them to 0 if null, otherwise 1 - offset
-            s = [0 if reading is None else 1 - reading['offset'] for reading in self.sensor.readings]
+            offsets = [0 if reading is None else 1 - reading['offset'] for reading in self.sensor.readings]
             # offsets=[0 if s is None else 1-s.offset for s in self.sensor.readings]
 
             #check
             # print(s)
             # outputs = network.NeuralNetwork.feed_forward(offsets, self.brain)
-            outputs = network.NeuralNetwork.feed_forward(s, self.brain)
+            outputs = network.feed_forwarNeuralNetwork.d(offsets, self.brain)
             #for checking outputs in terminal
             # print(outputs)
 
