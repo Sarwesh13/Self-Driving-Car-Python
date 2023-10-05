@@ -29,7 +29,7 @@ def generate_cars(N):
         player_cars.append(car_instance)
     return player_cars
 
-N = 2
+N = 20
 player_cars = generate_cars(N)
 try:
     with open('brain.txt','rb') as b:
@@ -45,14 +45,11 @@ traffics = [
     car.Car(road.get_lane_center(1), 9800, 30, 45,"TRAFFIC",2),
     car.Car(road.get_lane_center(0), 9600, 30, 45,"TRAFFIC",2),
     car.Car(road.get_lane_center(2), 9600, 30, 45,"TRAFFIC",2),
-    # car.Car(road.get_lane_center(1), 9400, 30, 45,"TRAFFIC",2),
-    # car.Car(road.get_lane_center(0), 9400, 30, 45,"TRAFFIC",2),
-    # car.Car(road.get_lane_center(0), 9200, 30, 45,"TRAFFIC",2),
-    # car.Car(road.get_lane_center(2), 9200, 30, 45,"TRAFFIC",2)
+    car.Car(road.get_lane_center(1), 9400, 30, 45,"TRAFFIC",2),
+    car.Car(road.get_lane_center(0), 9400, 30, 45,"TRAFFIC",2),
+    car.Car(road.get_lane_center(0), 9200, 30, 45,"TRAFFIC",2),
+    car.Car(road.get_lane_center(2), 9200, 30, 45,"TRAFFIC",2)
 ]
-#controls intance
-controlsP=controls.Controls("PLAYER")
-controlsT=controls.Controls("TRAFFIC")
 
 # Camera offset to follow the car on the y-axis
 camera_y_offset = 450
@@ -88,10 +85,6 @@ while running:
                 with open('brain.txt','wb') as f:
                     pickle.dump(best_brain,f)
 
-        # Update controls based on keyboard events
-        controlsP.update(event)
-        controlsT.update(event)
-
     #best car with least y-value
     best_car = min(player_cars, key=lambda c: c.y)
 
@@ -105,16 +98,15 @@ while running:
 
     #update and draw player car
     for i,p in enumerate(player_cars): 
-        p.update(controlsP, road.get_borders(), traffics)
+        p.update(road.get_borders(), traffics)
         if p == best_car:
             p.draw(screen, camera_y, draw_sensor=True)
         else:
             p.draw(screen, camera_y)
-        # print(f"car {i} brain is ", p.brain)
 
     #update and draw the traffic cars
     for traffic_car in traffics:
-        traffic_car.update(controlsT, road.get_borders(),[])
+        traffic_car.update(road.get_borders(),[])
         traffic_car.draw(screen, camera_y)
 
     #save brain button 

@@ -14,8 +14,8 @@ class Sensor:
     def update(self, road_borders,traffics):
         self.cast_rays()
         self.readings = []
-        for ray in self.rays:
-            self.readings.append(self.get_reading(ray, road_borders, traffics))
+        for i in range(len(self.rays)):
+            self.readings.append(self.get_reading(self.rays[i],road_borders,traffics))
 
     def get_reading(self, ray, road_borders, traffics):
         touches = []

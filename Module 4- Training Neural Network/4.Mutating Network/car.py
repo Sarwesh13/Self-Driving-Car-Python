@@ -1,5 +1,7 @@
 import pygame
 import math
+
+import controls
 import sensor
 import utils
 import network
@@ -29,44 +31,32 @@ class Car:
 
         if(control_type!="TRAFFIC"):
             self.sensor = sensor.Sensor(self)
-            # print(f"Created sensor for car with sensor: {self.sensor}")
             #input layer of 5(sensor rays) neurons, hidden layer of 6 neurons,and output of 4(up,left,right,down)
             self.brain=network.NeuralNetwork([self.sensor.ray_count,6,4])
-            # print(f"car has brain {self.brain}")
 
         self.damaged=False
         self.polygon = self.create_polygon()
+        self.controls=controls.Controls(control_type)
       
         
-    def update(self, controls, road_borders,traffics):
+    def update(self,road_borders,traffics):
         if not self.damaged:
-            self.move(controls)
+            self.move()
             self.polygon = self.create_polygon()
             self.damaged = self.assess_damage(road_borders,traffics)
         if hasattr(self, 'sensor'):
             self.sensor.update(road_borders,traffics)
             #extract offsets from sensor readings and map them to 0 if null, otherwise 1 - offset
             offsets = [0 if reading is None else 1 - reading['offset'] for reading in self.sensor.readings]
-            # offsets=[0 if s is None else 1-s.offset for s in self.sensor.readings]
 
-            #check
-            # print(s)
-            # outputs = network.NeuralNetwork.feed_forward(offsets, self.brain)
-            outputs = network.feed_forwarNeuralNetwork.d(offsets, self.brain)
-            #for checking outputs in terminal
-            # print(outputs)
+            outputs = network.NeuralNetwork.feed_forward(offsets, self.brain)
+
 
             if self.use_brain:
-                controls.forward = outputs[0]
-                controls.left = outputs[1]
-                controls.right = outputs[2]
-                controls.reverse = outputs[3]
-
-                # controls.forward = 1
-                # controls.left = 0
-                # controls.right = 1
-                # controls.reverse = 0
-
+                self.controls.forward = outputs[0]
+                self.controls.left = outputs[1]
+                self.controls.right = outputs[2]
+                self.controls.reverse = outputs[3]
     
     def create_polygon(self):
         points = []
@@ -102,10 +92,10 @@ class Car:
         return False
 
 
-    def move(self, controls):
-        if controls.forward:
+    def move(self):
+        if self.controls.forward:
             self.speed += self.acceleration
-        if controls.reverse:
+        if self.controls.reverse:
             self.speed -= self.acceleration
 
         if self.speed > self.max_speed:
@@ -120,14 +110,13 @@ class Car:
         if abs(self.speed) < self.friction:
             self.speed = 0
 
-        
         if self.speed != 0:
             # Value of flip: 1 if forwards, -1 if reverse
             # So that controls when reversing are flipped to simulate real-life reverse
             flip = 1 if self.speed > 0 else -1
-            if controls.left:
+            if self.controls.left:
                 self.angle += 0.03 * flip
-            if controls.right:
+            if self.controls.right:
                 self.angle -= 0.03 * flip
 
         # Use trigonometry(unit circle formula) to calculate new position
