@@ -33,12 +33,17 @@ N = 20
 player_cars = generate_cars(N)
 try:
     with open('brain.txt','rb') as b:
-        brain=pickle.load(b)
-        player_cars[0].brain=brain
+        player_cars[0].brain=pickle.load(b)
 except FileNotFoundError:
     print('no file')
 except Exception as e:
     print('error ', e)
+
+def save_brain():
+    best_brain = best_car.brain
+    with open('brain.txt','wb') as f:
+        for _ in range(N):
+            pickle.dump(best_brain,f)
 
 #array of traffic cars
 traffics = [
@@ -81,9 +86,7 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:               
             if save_button.collidepoint(event.pos):
                 save_button_state="click"
-                best_brain = best_car.brain
-                with open('brain.txt','wb') as f:
-                    pickle.dump(best_brain,f)
+                save_brain()
 
     #best car with least y-value
     best_car = min(player_cars, key=lambda c: c.y)

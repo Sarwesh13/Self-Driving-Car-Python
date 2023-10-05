@@ -28,13 +28,13 @@ def generate_cars(N):
         player_cars.append(car.Car(road.get_lane_center(1), 10000, 30, 45, "PLAYER"))
     return player_cars
 
-N = 1
+N = 20
 player_cars = generate_cars(N)
 try:
     with open('brain.txt', 'rb') as b:
-        saved_brain=pickle.load(b)
+        # saved_brain=pickle.load(b)
         for i in range(len(player_cars)):
-            player_cars[i].brain = saved_brain
+            player_cars[i].brain = pickle.load(b)
             if i != 0:
                 network.NeuralNetwork.mutate(player_cars[i].brain,amount=0.1)
 except FileNotFoundError:
@@ -49,7 +49,8 @@ except Exception as e:
 def save_brain():
     best_brain = best_car.brain
     with open('brain.txt','wb') as f:
-        pickle.dump(best_brain,f)
+        for _ in range(N):
+            pickle.dump(best_brain,f)
 
 #array of traffic cars
 traffics = [
