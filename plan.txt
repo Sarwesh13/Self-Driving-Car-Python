@@ -1,8 +1,0 @@
-In main.py,import and create instances of the Car, Road, TrafficCar, and other necessary classes, and manage the game loop.
-In car.py, define the player's car behavior.
-In road.py, handle drawing the road.
-In traffic.py, manage traffic cars, their behavior, and collision detection.
-In controls.py, handle user input.
-
-
-For collision detection pygame actually has a method called 'colliderect' which detects collision between rectangles
