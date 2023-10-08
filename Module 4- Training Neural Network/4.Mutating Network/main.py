@@ -32,7 +32,6 @@ N = 20
 player_cars = generate_cars(N)
 try:
     with open('brain.txt', 'rb') as b:
-        # saved_brain=pickle.load(b)
         for i in range(len(player_cars)):
             player_cars[i].brain = pickle.load(b)
             if i != 0:
@@ -41,10 +40,6 @@ except FileNotFoundError:
     print('no file')
 except Exception as e:
     print('error ', e)
-
-# if saved_brain:
-#     for i in range(1,len(player_cars)):
-#         network.NeuralNetwork.mutate(player_cars[i].brain,amount=0.1)
 
 def save_brain():
     best_brain = best_car.brain
